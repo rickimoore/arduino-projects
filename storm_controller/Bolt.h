@@ -1,19 +1,30 @@
 // example: class constructor
 using namespace std;
 
+#include "StormFrequency.h"
+
 //different states storm can be set with
 String CALM = "CALM";
 String STRIKE = "STRIKE";
 String FLICKER = "FLICKER";
 String SETTLE = "SETTLE";
 
+int HIGH_STORM[2] = {10000, 2000};
+
+StormFrequency frequencies[3] = {
+  {10000, 2000},
+  {15000, 5000},
+  {15000, 8000}
+  };
+
 class Bolt {
     int pinId;
     String stormState = CALM;
+    int activeFrequency = 2;
     
     //timeout durations
     unsigned long flickerDuration = rand() % 2000 + 1;
-    unsigned long calmDuration = rand() % 5000 + 1000;
+    unsigned long calmDuration = rand() % frequencies[activeFrequency].getHighFrequency() + frequencies[activeFrequency].getLowFrequency();
     
     //timer
     unsigned long previousTime = 0;
@@ -60,7 +71,7 @@ void Bolt::settleLightning () {
    brightness = brightness - fadeAmount; 
   } else {
     stormState = CALM;
-    calmDuration = rand() % 5000 + 1000;
+    calmDuration = rand() % frequencies[activeFrequency].getHighFrequency() + frequencies[activeFrequency].getLowFrequency();
   }
   // delay that causes dim effect
   delay(5);
